@@ -1,21 +1,30 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router"; // ✅ useRouter instead of useNavigation
+import { useRouter } from "expo-router";
 
 const WelcomeScreen = () => {
-  const router = useRouter(); // ✅ router for navigation
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
+      {/* Logo - positioned separately with spacing */}
+      <Image
+        source={require("../../assets/images/logo.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+
+      {/* Top Section */}
       <View style={styles.topSection}>
         <Image
           source={require("../images/red-fort.png")}
           style={styles.image}
           resizeMode="contain"
-          accessibilityLabel="Red Fort illustration"
+          accessibilityLabel="Red Fort"
         />
       </View>
 
+      {/* Bottom Panel */}
       <View style={styles.bottomPanel}>
         <Text style={styles.title}>Welcome to Viraasat</Text>
         <Text style={styles.description}>
@@ -27,7 +36,7 @@ const WelcomeScreen = () => {
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => router.push("/login")} // ✅ navigate to login.tsx
+            onPress={() => router.push("/login")}
             activeOpacity={0.7}
           >
             <Text style={styles.buttonText}>Login</Text>
@@ -35,7 +44,7 @@ const WelcomeScreen = () => {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => router.push("/signup")} // ✅ navigate to signup.tsx
+            onPress={() => router.push("/signup")}
             activeOpacity={0.7}
           >
             <Text style={styles.buttonText}>Sign Up</Text>
@@ -53,65 +62,69 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: BEIGE,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
+  },
+  logo: {
+    width: 140,
+    height: 80,
+    alignSelf: "center",
+    zIndex: 100,
+    marginTop: 60, // ✅ spacing from top
+    marginBottom: -100, // ✅ spacing from Red Fort
   },
   topSection: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    marginBottom: 50,
   },
   image: {
-    width: 400,
-    height: 430,
+    width: "130%",
+    height: "130%",
   },
   bottomPanel: {
+    flex: 0.7,
     backgroundColor: DARK_RED,
-    width: 393,
-    height: 353,
-    marginBottom: -20,
-    borderRadius: 30,
+    width: "100%",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     paddingVertical: 20,
     paddingHorizontal: 25,
     alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     color: BEIGE,
-    fontSize: 36,
-    fontWeight: "500",
+    fontSize: 32,
+    fontWeight: "600",
     textAlign: "center",
-    marginTop: 33,
     marginBottom: 10,
   },
   description: {
     color: BEIGE,
     fontSize: 16,
     textAlign: "center",
-    marginTop: 10,
     marginBottom: 20,
-    lineHeight: 19,
+    lineHeight: 22,
   },
   buttonRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    marginTop: 10,
   },
   button: {
     backgroundColor: BEIGE,
-    height: 43,
-    width: 140,
+    height: 45,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    marginHorizontal: 5,
-    marginTop: 20,
+    marginHorizontal: 8,
   },
   buttonText: {
     color: DARK_RED,
     fontWeight: "700",
-    fontSize: 20,
+    fontSize: 18,
     textAlign: "center",
   },
 });

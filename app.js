@@ -2,6 +2,10 @@ import React from "react";
 import { Text, View } from "react-native";
 import { useFonts, LeagueSpartan_400Regular, LeagueSpartan_700Bold } from "@expo-google-fonts/league-spartan";
 import AppLoading from "expo-app-loading";
+import { Amplify } from 'aws-amplify';
+import config from './app/aws-exports.js';
+
+Amplify.configure(config);
 
 export default function App() {
   const [fontsLoaded] = useFonts({

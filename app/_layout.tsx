@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Stack } from 'expo-router';
 import React from 'react';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -7,13 +7,13 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
+    <Stack
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}
     >
-      <Tabs.Screen
+      <Stack.Screen
         name="index" // 👈 your Welcome screen
         options={{
           tabBarStyle: { display: 'none' }, // hides the tab bar
@@ -21,20 +21,20 @@ export default function TabLayout() {
         }}
       />
 
-      <Tabs.Screen
+      <Stack.Screen
         name="home"
         options={{
           title: 'Home',
         }}
       />
 
-      <Tabs.Screen
+      <Stack.Screen
         name="explore"
         options={{
           title: 'Explore',
         }}
       />
-    </Tabs>
+    </Stack>
   );
 }
 
