@@ -11,8 +11,10 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { signUp } from "aws-amplify/auth";
+import { useTranslation } from "react-i18next";
 
 const SignUpScreen: React.FC = () => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState(""); // used as email
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,7 +24,7 @@ const SignUpScreen: React.FC = () => {
 
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match ❌");
+      Alert.alert(t("error"), t("password_mismatch"));
       return;
     }
 
@@ -31,21 +33,19 @@ const SignUpScreen: React.FC = () => {
         username: username,
         password: password,
         options: {
-          userAttributes: {
-            email: username,
-          },
+          userAttributes: { email: username },
         },
       });
 
       console.log("✅ Sign up successful! Confirmation code sent to email.");
-      Alert.alert(
-        "Sign Up Successful",
-        "A confirmation code has been sent to your email. Please verify your account."
-      );
-      router.push("/confirm-signup");
+      Alert.alert(t("success"), t("signup_success"));
+      router.push({
+        pathname: "/confirmsignup",
+        params: { email: username },
+      });
     } catch (error: any) {
       console.log("❌ Error signing up:", error);
-      Alert.alert("Sign Up Failed", error.message || "Something went wrong");
+      Alert.alert(t("error"), error.message || t("signup_failed"));
     }
   };
 
@@ -71,16 +71,14 @@ const SignUpScreen: React.FC = () => {
         />
       </View>
 
-      <Text style={styles.title}>Sign Up</Text>
-      <Text style={styles.subtitle}>
-        Begin your journey into India’s heritage
-      </Text>
+      <Text style={styles.title}>{t("Sign Up")}</Text>
+      <Text style={styles.subtitle}>{t("Create New Account")}</Text>
 
       {/* Form Container */}
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Email or Username"
+          placeholder={t("username")}
           placeholderTextColor="#BFA9A9"
           value={username}
           onChangeText={setUsername}
@@ -94,7 +92,7 @@ const SignUpScreen: React.FC = () => {
         <View style={styles.passwordContainer}>
           <TextInput
             style={styles.inputPassword}
-            placeholder="Password"
+            placeholder={t("password")}
             placeholderTextColor="#BFA9A9"
             value={password}
             onChangeText={setPassword}
@@ -117,7 +115,7 @@ const SignUpScreen: React.FC = () => {
         <View style={styles.passwordContainer}>
           <TextInput
             style={styles.inputPassword}
-            placeholder="Confirm Password"
+            placeholder={t("confirm_password")}
             placeholderTextColor="#BFA9A9"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
@@ -141,12 +139,12 @@ const SignUpScreen: React.FC = () => {
           activeOpacity={0.8}
           onPress={handleSignUp}
         >
-          <Text style={styles.loginButtonText}>Sign Up</Text>
+          <Text style={styles.loginButtonText}>{t("Sign Up")}</Text>
         </TouchableOpacity>
 
         <View style={styles.orSignInContainer}>
           <View style={styles.line} />
-          <Text style={styles.orSignInText}>or sign up with</Text>
+          <Text style={styles.orSignInText}>{t("Or Sign Up With")}</Text>
           <View style={styles.line} />
         </View>
 
@@ -163,12 +161,12 @@ const SignUpScreen: React.FC = () => {
         </View>
 
         <Text style={styles.signUpText}>
-          Already have an account?{" "}
+          {t("Already have an account?")}{" "}
           <Text
             style={styles.signUpLink}
             onPress={() => router.push("/login")}
           >
-            Login
+            {t("Login")}
           </Text>
         </Text>
       </View>
@@ -176,6 +174,9 @@ const SignUpScreen: React.FC = () => {
   );
 };
 
+export default SignUpScreen;
+
+// same styles you already have ↓
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#EDE1CB" },
   header: {
@@ -185,11 +186,11 @@ const styles = StyleSheet.create({
     marginTop: "10%",
   },
   logo: {
-    width: 140,
-    height: 80,
+    width: 280,
+    height: 240,
     alignSelf: "center",
     zIndex: 100,
-    marginTop: 10,
+    marginTop: -70,
     marginBottom: 30,
   },
   backButton: {
@@ -204,17 +205,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: -15,
   },
   title: {
-    fontSize: 40,
+    fontSize: 64,
     fontWeight: "900",
     color: "#6B1A1A",
     textAlign: "center",
-    marginTop: 10,
+    marginTop: -75,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 20,
     color: "#7A3B3B",
     textAlign: "center",
     marginTop: 5,
@@ -260,9 +261,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#F9F0E6",
   },
-  eyeIcon: {
-    padding: 5,
-  },
+  eyeIcon: { padding: 5 },
   loginButton: {
     backgroundColor: "#F9F0E6",
     width: "60%",
@@ -316,5 +315,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
-
-export default SignUpScreen;

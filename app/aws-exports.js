@@ -3,25 +3,14 @@
 
 const awsmobile = {
     "aws_project_region": "ap-south-1",
-    "aws_cognito_identity_pool_id": "ap-south-1:93f3f2f8-fdfc-4cc8-ba3f-15971e19f2f2",
+    "aws_cognito_identity_pool_id": "ap-south-1:6d8a3887-5057-4f35-9554-7897b4a4019a",
     "aws_cognito_region": "ap-south-1",
-    "aws_user_pools_id": "ap-south-1_UxkcxsgND",
-    "aws_user_pools_web_client_id": "17mji0sj3e4kt4cr0uvq7hi1u3",
-    "oauth": {
-        "domain": "viraasat-app-dev.auth.ap-south-1.amazoncognito.com",
-        "scope": [
-            "phone",
-            "email",
-            "openid",
-            "profile",
-            "aws.cognito.signin.user.admin"
-        ],
-        "redirectSignIn": "myapp://,myapp://",
-        "redirectSignOut": "myapp://",
-        "responseType": "code"
-    },
-    "federationTarget": "COGNITO_USER_POOLS",
-    "aws_cognito_username_attributes": [],
+    "aws_user_pools_id": "ap-south-1_otAjLBSJ7",
+    "aws_user_pools_web_client_id": "1n05m5q0f98a32cq1el77r8h43",
+    "oauth": {},
+    "aws_cognito_username_attributes": [
+        "EMAIL"
+    ],
     "aws_cognito_social_providers": [],
     "aws_cognito_signup_attributes": [
         "EMAIL"
@@ -37,10 +26,10 @@ const awsmobile = {
     "aws_cognito_verification_mechanisms": [
         "EMAIL"
     ],
-    "aws_appsync_graphqlEndpoint": "https://rljqzkb36nfkbjufvbkxypbwmy.appsync-api.ap-south-1.amazonaws.com/graphql",
+    "aws_appsync_graphqlEndpoint": "https://6nbkvuzpgbhrtilpdqqwpvl6sa.appsync-api.ap-south-1.amazonaws.com/graphql",
     "aws_appsync_region": "ap-south-1",
     "aws_appsync_authenticationType": "API_KEY",
-    "aws_appsync_apiKey": "da2-pmda4gfpyzh6beguk5iwc35baa",
+    "aws_appsync_apiKey": "da2-cfepekjtpjby3evgqqnvndgqai",
     "aws_user_files_s3_bucket": "viraasat9975488b39cb41b18a39c90ce4068c105cfb4-dev",
     "aws_user_files_s3_bucket_region": "ap-south-1"
 };

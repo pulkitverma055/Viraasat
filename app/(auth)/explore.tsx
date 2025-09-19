@@ -1,49 +1,51 @@
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router"; // ✅ import router
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
+  Dimensions,
   Image,
   ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
   TouchableOpacity,
-  Dimensions
+  View
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { router, useRouter } from "expo-router"; // ✅ import router
+import { useTranslation } from "react-i18next"; // ✅ import translation hook
 
 const monuments = [
-  { name: "Taj Mahal", uri: "https://picsum.photos/id/1011/100/100" },
-  { name: "Ellora Caves", uri: "https://picsum.photos/id/1018/100/100" },
-  { name: "Hawa Mahal", uri: "https://picsum.photos/id/1025/100/100" },
-  { name: "Gadisar lake", uri: "https://picsum.photos/id/1035/100/100" },
-  { name: "Hampi Temple", uri: "https://picsum.photos/id/1043/100/100" },
-  { name: "Charminar", uri: "https://picsum.photos/id/1050/100/100" },
-  { name: "Jantar Mantar", uri: "https://picsum.photos/id/1062/100/100" },
-  { name: "Elephanta Caves", uri: "https://picsum.photos/id/1070/100/100" },
-  { name: "Qutub Minar", uri: "https://picsum.photos/id/1084/100/100" },
-  { name: "Sun Temple", uri: "https://picsum.photos/id/1080/100/100" },
-  { name: "Buland Darwza", uri: "https://picsum.photos/id/109/100/100" },
-  { name: "Pavagadh", uri: "https://picsum.photos/id/110/100/100" },
-  { name: "Khajuraho Temple", uri: "https://picsum.photos/id/111/100/100" },
-  { name: "Humayun’s Tomb", uri: "https://picsum.photos/id/112/100/100" },
-  { name: "Rani ki Vav", uri: "https://picsum.photos/id/113/100/100" },
-  { name: "Amber fort", uri: "https://picsum.photos/id/114/100/100" }
+  { nameKey: "taj_mahal", uri: "https://picsum.photos/id/1011/100/100" },
+  { nameKey: "ellora_caves", uri: "https://picsum.photos/id/1018/100/100" },
+  { nameKey: "hawa_mahal", uri: "https://picsum.photos/id/1025/100/100" },
+  { nameKey: "gadisar_lake", uri: "https://picsum.photos/id/1035/100/100" },
+  { nameKey: "hampi_temple", uri: "https://picsum.photos/id/1043/100/100" },
+  { nameKey: "charminar", uri: "https://picsum.photos/id/1050/100/100" },
+  { nameKey: "jantar_mantar", uri: "https://picsum.photos/id/1062/100/100" },
+  { nameKey: "elephanta_caves", uri: "https://picsum.photos/id/1070/100/100" },
+  { nameKey: "qutub_minar", uri: "https://picsum.photos/id/1084/100/100" },
+  { nameKey: "sun_temple", uri: "https://picsum.photos/id/1080/100/100" },
+  { nameKey: "buland_darwaza", uri: "https://picsum.photos/id/109/100/100" },
+  { nameKey: "pavagadh", uri: "https://picsum.photos/id/110/100/100" },
+  { nameKey: "khajuraho_temple", uri: "https://picsum.photos/id/111/100/100" },
+  { nameKey: "humayuns_tomb", uri: "https://picsum.photos/id/112/100/100" },
+  { nameKey: "rani_ki_vav", uri: "https://picsum.photos/id/113/100/100" },
+  { nameKey: "amber_fort", uri: "https://picsum.photos/id/114/100/100" }
 ];
 
 const bottomTabs = [
-  { name: "Home", icon: "home" },
-  { name: "Explore", icon: "compass" },
-  { name: "Travel", icon: "map" },
-  { name: "Profile", icon: "user" }
+  { nameKey: "home", icon: "home" },
+  { nameKey: "explore", icon: "compass" },
+  { nameKey: "travel", icon: "map" },
+  { nameKey: "profile", icon: "user" }
 ];
 
 const App = () => {
+  const { t } = useTranslation(); // ✅ translation hook
   const [searchText, setSearchText] = useState("");
 
   // Filter monuments by search text
   const filteredMonuments = monuments.filter((m) =>
-    m.name.toLowerCase().includes(searchText.toLowerCase())
+    t(m.nameKey).toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -51,14 +53,13 @@ const App = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity 
-        style={styles.backButton}
-        onPress={() => router.push("/home")} // 👈 navigate to Home
-        // activeOpacity={0.7}
+          style={styles.backButton}
+          onPress={() => router.push("/home")}
         >
-            <FontAwesome name="arrow-left" size={24} color="#6B0A0A" />
-            </TouchableOpacity>
+          <FontAwesome name="arrow-left" size={24} color="#6B0A0A" />
+        </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>Explore</Text>
+        <Text style={styles.headerTitle}>{t("explore_title")}</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -67,7 +68,7 @@ const App = () => {
         <FontAwesome name="search" size={20} color="#9E9E9E" style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search monuments"
+          placeholder={t("search_placeholder")}
           placeholderTextColor="#9E9E9E"
           value={searchText}
           onChangeText={setSearchText}
@@ -78,71 +79,67 @@ const App = () => {
       </View>
 
       {/* Monuments Grid */}
-<ScrollView contentContainerStyle={styles.grid} showsVerticalScrollIndicator={false}>
-  {filteredMonuments.map((monument, index) => {
-    const isEllora = monument.name === "Ellora Caves"; // 👈 check for Ellora
+      <ScrollView contentContainerStyle={styles.grid} showsVerticalScrollIndicator={false}>
+        {filteredMonuments.map((monument, index) => {
+          const isEllora = monument.nameKey === "ellora_caves"; // 👈 check for Ellora
 
-    return (
-      <TouchableOpacity
-        key={index}
-        style={styles.monumentItem}
-        activeOpacity={0.7}
-        onPress={() => {
-          if (isEllora) {
-            router.push("/Ellora"); // 👈 navigate to Ellora page
-          }
-        }}
-      >
-        <Image
-          source={{ uri: monument.uri }}
-          style={styles.monumentImage}
-          accessibilityLabel={`${monument.name} image`}
-        />
-        <Text style={styles.monumentName}>{monument.name}</Text>
-      </TouchableOpacity>
-    );
-  })}
-</ScrollView>
-
+          return (
+            <TouchableOpacity
+              key={index}
+              style={styles.monumentItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                if (isEllora) {
+                  router.push("/Ellora"); // 👈 navigate to Ellora page
+                }
+              }}
+            >
+              <Image
+                source={{ uri: monument.uri }}
+                style={styles.monumentImage}
+                accessibilityLabel={`${t(monument.nameKey)} image`}
+              />
+              <Text style={styles.monumentName}>{t(monument.nameKey)}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
 
       {/* Bottom Navigation Bar */}
       <View style={styles.bottomNav}>
         {bottomTabs.map((tab, index) => {
-            const isActive = tab.name === "Explore";
-            return (
+          const isActive = tab.nameKey === "explore";
+          return (
             <TouchableOpacity
-        key={index}
-        style={styles.bottomNavItem}
-        activeOpacity={0.7}
-        onPress={() => {
-          if (tab.name === "Home") {
-            router.push("/home");   // 👈 navigate to Home
-            } else if (tab.name === "Profile") {
-            router.push("/profile"); // 👈 Navigate to Profile
-            }
-          // You can add later for Travel/Profile if needed
-        }}
-    
-      >
-        <FontAwesome
-          name={tab.icon}
-          size={24}
-          color="#F0E6D2"
-          style={{ opacity: isActive ? 1 : 0.5 }}
-        />
-        <Text
-          style={[
-            styles.bottomNavText,
-            { fontWeight: isActive ? "700" : "400", opacity: isActive ? 1 : 0.5 }
-          ]}
-        >
-          {tab.name}
-        </Text>
-      </TouchableOpacity>
-    );
-  })}
-</View>
-
+              key={index}
+              style={styles.bottomNavItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                if (tab.nameKey === "home") {
+                  router.push("/home");   
+                } else if (tab.nameKey === "profile") {
+                  router.push("/profile"); 
+                }
+              }}
+            >
+              <FontAwesome
+                name={tab.icon}
+                size={24}
+                color="#F0E6D2"
+                style={{ opacity: isActive ? 1 : 0.5 }}
+              />
+              <Text
+                style={[
+                  styles.bottomNavText,
+                  { fontWeight: isActive ? "700" : "400", opacity: isActive ? 1 : 0.5 }
+                ]}
+              >
+                {t(tab.nameKey)}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
@@ -179,7 +176,6 @@ const styles = StyleSheet.create({
     color: "#6B0A0A",
     fontFamily: "System",
     marginTop : '5%'
-    
   },
   searchContainer: {
     flexDirection: "row",

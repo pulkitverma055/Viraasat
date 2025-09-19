@@ -7,9 +7,21 @@ import {
   Image,
 } from "react-native";
 import { useRouter } from "expo-router";
+import i18n from "./i18n";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LanguageScreen = () => {
   const router = useRouter();
+
+  const handleLanguageSelect = async (lang) => {
+    try {
+      await i18n.changeLanguage(lang); // ✅ set language
+      await AsyncStorage.setItem("appLanguage", lang); // ✅ persist selected language
+      router.replace("/(auth)"); // ✅ navigate to login/signup
+    } catch (error) {
+      console.log("Language change error:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -28,7 +40,7 @@ const LanguageScreen = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.langButton}
-          onPress={() => router.push("/(auth)")}
+          onPress={() => handleLanguageSelect("en")}
         >
           <Text style={styles.langText}>English</Text>
           <Image
@@ -40,7 +52,7 @@ const LanguageScreen = () => {
 
         <TouchableOpacity
           style={styles.langButton}
-          onPress={() => router.push("/(auth)")}
+          onPress={() => handleLanguageSelect("hi")}
         >
           <Text style={styles.langText}>हिन्दी</Text>
           <Image
@@ -52,7 +64,7 @@ const LanguageScreen = () => {
 
         <TouchableOpacity
           style={styles.langButton}
-          onPress={() => router.push("/(auth)")}
+          onPress={() => handleLanguageSelect("or")}
         >
           <Text style={styles.langText}>ଓଡ଼ିଆ</Text>
           <Image
@@ -81,13 +93,13 @@ const styles = StyleSheet.create({
     height: 280,
     marginTop: 0,
     marginBottom: -100,
-    marginRight : -11
+    marginRight: -11,
   },
   title: {
     fontSize: 40,
     fontWeight: "700",
     color: DARK_RED,
-    marginBottom: '16%',
+    marginBottom: "16%",
     marginTop: 40,
   },
   subtitle: {

@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next"; // ✅ import hook
 
 const WelcomeScreen = () => {
   const router = useRouter();
+  const { t } = useTranslation(); // ✅ access translations
 
   return (
     <View style={styles.container}>
@@ -26,11 +28,9 @@ const WelcomeScreen = () => {
 
       {/* Bottom Panel */}
       <View style={styles.bottomPanel}>
-        <Text style={styles.title}>Welcome to Viraasat</Text>
+        <Text style={styles.title}>{t("welcome_title")}</Text>
         <Text style={styles.description}>
-          A journey into India's glorious past awaits you. From magnificent
-          monuments to hidden tales, experience the legacy of our culture
-          reimagined with AR, anytime and anywhere.
+          {t("welcome_description")}
         </Text>
 
         <View style={styles.buttonRow}>
@@ -39,7 +39,7 @@ const WelcomeScreen = () => {
             onPress={() => router.push("/login")}
             activeOpacity={0.7}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>{t("login")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -47,7 +47,7 @@ const WelcomeScreen = () => {
             onPress={() => router.push("/signup")}
             activeOpacity={0.7}
           >
-            <Text style={styles.buttonText}>Sign Up</Text>
+            <Text style={styles.buttonText}>{t("signup")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     height: 80,
     alignSelf: "center",
     zIndex: 100,
-    marginTop: 60, // ✅ spacing from top
-    marginBottom: -100, // ✅ spacing from Red Fort
+    marginTop: 60,
+    marginBottom: -100,
   },
   topSection: {
     flex: 1,

@@ -9,12 +9,12 @@ import {
   StatusBar,
   Dimensions,
   Animated,
-  FlatList,
-  ScrollView,   // ✅ added
+  ScrollView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 
@@ -34,34 +34,33 @@ const recommendedSites = [
   { id: 6, name: "Jantar Mantar", location: "Jaipur", image: "https://picsum.photos/id/1021/400/400" },
 ];
 
-export default function App() {
+export default function HomeScreen() {
+  const { t } = useTranslation();
   const scrollX = useRef(new Animated.Value(0)).current;
 
-const renderRecommended = ({ item, index }) => {
-  const inputRange = [
-    (index - 1) * (width * 0.75),
-    index * (width * 0.75),
-    (index + 1) * (width * 0.75),
-  ];
+  const renderRecommended = ({ item, index }) => {
+    const inputRange = [
+      (index - 1) * (width * 0.75),
+      index * (width * 0.75),
+      (index + 1) * (width * 0.75),
+    ];
 
-  const scale = scrollX.interpolate({
-    inputRange,
-    outputRange: [0.9, 1, 0.9],
-    extrapolate: "clamp",
-  });
+    const scale = scrollX.interpolate({
+      inputRange,
+      outputRange: [0.9, 1, 0.9],
+      extrapolate: "clamp",
+    });
 
-  const opacity = scrollX.interpolate({
-    inputRange,
-    outputRange: [0.6, 1, 0.6],
-    extrapolate: "clamp",
-  });
+    const opacity = scrollX.interpolate({
+      inputRange,
+      outputRange: [0.6, 1, 0.6],
+      extrapolate: "clamp",
+    });
 
-  // ✅ If Ellora Caves → make it clickable
-  if (item.name === "Ellora Caves") {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => router.push("/Ellora")}
+        onPress={() => item.name === "Ellora Caves" && router.push("/Ellora")}
       >
         <Animated.View
           style={[
@@ -77,35 +76,13 @@ const renderRecommended = ({ item, index }) => {
         </Animated.View>
       </TouchableOpacity>
     );
-  }
-
-  // Default return
-  return (
-    <Animated.View
-      style={[
-        styles.recommendedCard,
-        { transform: [{ scale }], opacity },
-      ]}
-    >
-      <Image source={{ uri: item.image }} style={styles.recommendedImage} />
-      <View style={styles.recommendedTextContainer}>
-        <Text style={styles.recommendedName}>{item.name}</Text>
-        <Text style={styles.recommendedLocation}>{item.location}</Text>
-      </View>
-    </Animated.View>
-  );
-};
-
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#F9F5EE" />
 
-      {/* ✅ Make content scrollable */}
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 0 }}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -114,25 +91,27 @@ const renderRecommended = ({ item, index }) => {
               style={styles.profileImage}
             />
             <View style={styles.greetingTextContainer}>
-              <Text style={styles.greetingSmall}>Hi, Naman</Text>
-              <Text style={styles.greetingLarge}>Good Morning</Text>
+              <Text style={styles.greetingSmall}>{t("greeting_small", { name: "Naman" })}</Text>
+              <Text style={styles.greetingLarge}>{t("greeting_large")}</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.settingsButton} 
-          onPressOut={() => router.push("/settings")}
-          activeOpacity={0.7}>
+          <TouchableOpacity
+            style={styles.settingsButton}
+            onPressOut={() => router.push("/settings")}
+            activeOpacity={0.7}
+          >
             <FontAwesome name="cog" size={28} color="#6B0A0A" />
           </TouchableOpacity>
         </View>
 
         {/* Explore Text */}
-        <Text style={styles.exploreText}>Let’s explore our heritage</Text>
+        <Text style={styles.exploreText}>{t("explore_text")}</Text>
 
         {/* Search Bar */}
         <View style={styles.searchBar}>
           <FontAwesome name="search" size={20} color="#B3B3B3" style={{ marginLeft: 12 }} />
           <TextInput
-            placeholder="Search monuments"
+            placeholder={t("search_placeholder")}
             placeholderTextColor="#B3B3B3"
             style={styles.searchInput}
           />
@@ -140,40 +119,26 @@ const renderRecommended = ({ item, index }) => {
         </View>
 
         {/* Popular Sites */}
-<Text style={styles.sectionTitle}>Popular Sites</Text>
-<View style={styles.popularSitesContainer}>
-  {popularSites.map((site) => {
-    // If the site is Ellora Caves, make it clickable
-    if (site.name === "Ellora Caves") {
-      return (
-        <TouchableOpacity 
-          key={site.id} 
-          style={styles.popularSiteItem} 
-          onPress={() => router.push("/Ellora")} // 👈 navigate to Ellora screen
-          activeOpacity={0.7}
-        >
-          <Image source={{ uri: site.image }} style={styles.popularSiteImage} />
-          <Text style={styles.popularSiteName}>{site.name}</Text>
-        </TouchableOpacity>
-      );
-    }
+        <Text style={styles.sectionTitle}>{t("popular_sites")}</Text>
+        <View style={styles.popularSitesContainer}>
+          {popularSites.map((site) => (
+            <TouchableOpacity
+              key={site.id}
+              style={styles.popularSiteItem}
+              onPress={() => site.name === "Ellora Caves" && router.push("/Ellora")}
+              activeOpacity={0.7}
+            >
+              <Image source={{ uri: site.image }} style={styles.popularSiteImage} />
+              <Text style={styles.popularSiteName}>{site.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-    // Other sites remain normal View
-    return (
-      <View key={site.id} style={styles.popularSiteItem}>
-        <Image source={{ uri: site.image }} style={styles.popularSiteImage} />
-        <Text style={styles.popularSiteName}>{site.name}</Text>
-      </View>
-    );
-  })}
-</View>
-
-
-        {/* Recommended Section */}
-        <Text style={styles.sectionTitle}>Recommended</Text>
+        {/* Recommended */}
+        <Text style={styles.sectionTitle}>{t("recommended")}</Text>
         <Animated.FlatList
           data={recommendedSites}
-          keyExtractor={(item, index) => `${item.id}-${index}`}  // ✅ avoid duplicate key error
+          keyExtractor={(item, index) => `${item.id}-${index}`}
           horizontal
           showsHorizontalScrollIndicator={false}
           snapToInterval={width * 0.75}
@@ -191,11 +156,11 @@ const renderRecommended = ({ item, index }) => {
         />
       </ScrollView>
 
-      {/* Bottom Navigation Bar */}
+      {/* Bottom Nav */}
       <LinearGradient colors={["#6B0A0A", "#6B0A0A"]} style={styles.bottomNavBar}>
         <TouchableOpacity style={styles.navItem} activeOpacity={0.7}>
           <FontAwesome name="home" size={28} color="#F9F5EE" />
-          <Text style={[styles.navLabel, styles.navLabelActive]}>Home</Text>
+          <Text style={[styles.navLabel, styles.navLabelActive]}>{t("bottom_home")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.navItem}
@@ -203,16 +168,19 @@ const renderRecommended = ({ item, index }) => {
           onPress={() => router.push("/explore")}
         >
           <FontAwesome name="compass" size={24} color="#D3B9B9" />
-          <Text style={styles.navLabel}>Explore</Text>
+          <Text style={styles.navLabel}>{t("bottom_explore")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} activeOpacity={0.7}>
           <FontAwesome name="map" size={24} color="#D3B9B9" />
-          <Text style={styles.navLabel}>Travel</Text>
+          <Text style={styles.navLabel}>{t("bottom_travel")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} activeOpacity={0.7}
-            onPress={() => router.push("/profile")}>
+        <TouchableOpacity
+          style={styles.navItem}
+          activeOpacity={0.7}
+          onPress={() => router.push("/profile")}
+        >
           <FontAwesome name="user" size={24} color="#D3B9B9" />
-          <Text style={styles.navLabel}>Profile</Text>
+          <Text style={styles.navLabel}>{t("bottom_profile")}</Text>
         </TouchableOpacity>
       </LinearGradient>
     </View>
