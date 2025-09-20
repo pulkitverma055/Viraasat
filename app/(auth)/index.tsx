@@ -11,7 +11,7 @@ const WelcomeScreen = () => {
     <View style={styles.container}>
       {/* Logo - positioned separately with spacing */}
       <Image
-        source={require("../../assets/images/logo.png")}
+        source={require("../../assets/images/Logo.png")}
         style={styles.logo}
         resizeMode="contain"
       />

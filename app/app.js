@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator } from "react-native";
-import { useFonts, LeagueSpartan_400Regular, LeagueSpartan_700Bold } from "@expo-google-fonts/league-spartan";
-import { Amplify } from "aws-amplify";
-import config from "./aws-exports"; 
+import { LeagueSpartan_400Regular, LeagueSpartan_700Bold, useFonts } from "@expo-google-fonts/league-spartan";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 
 // i18n imports
 import { I18nextProvider } from "react-i18next";
-import i18n, { initI18n } from "./i18n"; // ⚠️ use initI18n here
+import i18n, { initI18n } from "../app-example/app/i18n";
 
 // Expo Router root layout
-import RootLayout from "../app/_layout"; // ✅ fixed path (your file is inside app/)
-
-Amplify.configure(config);
+import RootLayout from "./_layout";
 
 export default function App() {
   const [ready, setReady] = useState(false);

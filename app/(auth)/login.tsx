@@ -1,47 +1,40 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { signIn } from "aws-amplify/auth";
-import { useTranslation } from "react-i18next"; // ✅ import hook
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { handleGoogleSignIn, handleSignIn } from "../../app-example/app/lib/auth"; // ✅ check path
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // ✅ toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const { t } = useTranslation(); // ✅ translation hook
+  const { t } = useTranslation();
 
   const handleLogin = async () => {
     if (!username || !password) {
       Alert.alert(t("error"), t("login_required"));
       return;
     }
-    try {
-      const { isSignedIn, nextStep } = await signIn({
-        username,
-        password,
-      });
 
-      if (isSignedIn) {
-        console.log("✅ Sign in successful!");
-        Alert.alert(t("success"), t("login_success"));
+    try {
+      const success = await handleSignIn(username, password); // ✅ call auth
+      if (success) {
         router.push("/home");
       } else {
-        console.log("ℹ️ Next step:", nextStep);
-        Alert.alert(t("action_required"), JSON.stringify(nextStep));
+        Alert.alert(t("error"), t("invalid_credentials")); // ✅ error handling
       }
-    } catch (error: any) {
-      console.log("❌ Full error object:", error);
-      Alert.alert(t("error"), error.message || "Something went wrong");
+    } catch (err) {
+      Alert.alert(t("error"), t("login_failed"));
     }
   };
 
@@ -61,7 +54,7 @@ const LoginScreen = () => {
       {/* Logo and Title Section */}
       <View style={styles.logoContainer}>
         <Image
-          source={require("../../assets/images/logo.png")}
+          source={require("../../assets/images/Logo.png")}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -81,7 +74,7 @@ const LoginScreen = () => {
           onChangeText={setUsername}
           autoCapitalize="none"
           autoCorrect={false}
-          keyboardType="default"
+          keyboardType="email-address"
           returnKeyType="next"
         />
 
@@ -108,8 +101,8 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity 
-        activeOpacity={0.7}
+        <TouchableOpacity
+          activeOpacity={0.7}
           onPress={() => router.push("/home")}
         >
           <Text style={styles.forgotPassword}>{t("Skip Log In")}</Text>
@@ -118,7 +111,7 @@ const LoginScreen = () => {
         <TouchableOpacity
           style={styles.loginButton}
           activeOpacity={0.8}
-          onPress={handleLogin}
+          onPress={handleLogin} // ✅ use updated handler
         >
           <Text style={styles.loginButtonText}>{t("login")}</Text>
         </TouchableOpacity>
@@ -134,7 +127,20 @@ const LoginScreen = () => {
           <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
             <FontAwesome name="facebook-f" size={28} color="#7A3B3B" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={styles.socialIcon}
+            activeOpacity={0.7}
+            onPress={async () => {
+              try {
+                const googleUser = await handleGoogleSignIn(); // ✅ google login
+                if (googleUser) {
+                  router.push("/home");
+                }
+              } catch (err) {
+                Alert.alert(t("error"), t("google_login_failed"));
+              }
+            }}
+          >
             <FontAwesome name="google" size={28} color="#7A3B3B" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>

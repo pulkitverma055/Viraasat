@@ -27,7 +27,7 @@ const LanguageScreen = () => {
     <View style={styles.container}>
       {/* Logo */}
       <Image
-        source={require("../assets/images/logo.png")}
+        source={require("../assets/images/Logo.png")}
         style={styles.logo}
         resizeMode="contain"
       />

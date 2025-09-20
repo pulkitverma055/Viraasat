@@ -1,51 +1,53 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { signUp } from "aws-amplify/auth";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+// ✅ 1. Import the new Supabase function
+import { handleGoogleSignIn, handleSignUp as supabaseSignUp } from "../../app-example/app/lib/auth"; // Make sure path is correct
 
 const SignUpScreen: React.FC = () => {
   const { t } = useTranslation();
-  const [username, setUsername] = useState(""); // used as email
+  const [username, setUsername] = useState(""); // This will be the email
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
+  // ✅ 2. Updated function to call Supabase and navigate
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       Alert.alert(t("error"), t("password_mismatch"));
       return;
     }
 
-    try {
-      const { userId } = await signUp({
-        username: username,
-        password: password,
-        options: {
-          userAttributes: { email: username },
-        },
-      });
+    const success = await supabaseSignUp(username, password);
 
-      console.log("✅ Sign up successful! Confirmation code sent to email.");
-      Alert.alert(t("success"), t("signup_success"));
-      router.push({
-        pathname: "/confirmsignup",
-        params: { email: username },
-      });
-    } catch (error: any) {
-      console.log("❌ Error signing up:", error);
-      Alert.alert(t("error"), error.message || t("signup_failed"));
+    if (success) {
+      Alert.alert(t("success"), t("account_created")); 
+      router.push("/login"); // 👈 Navigate to Login screen
+    } else {
+      Alert.alert(t("error"), t("signup_failed"));
+    }
+  };
+
+  // ✅ 3. Wrap Google Sign-In with success/failure handling
+  const handleGoogle = async () => {
+    const success = await handleGoogleSignIn();
+    if (success) {
+      Alert.alert(t("success"), t("account_created"));
+      router.replace("/(tabs)/login"); // 👈 Redirect to home after Google login
+    } else {
+      Alert.alert(t("error"), t("google_signin_failed"));
     }
   };
 
@@ -65,7 +67,7 @@ const SignUpScreen: React.FC = () => {
       {/* Logo and Title Section */}
       <View style={styles.logoContainer}>
         <Image
-          source={require("../../assets/images/logo.png")}
+          source={require("../../assets/images/Logo.png")}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -152,7 +154,11 @@ const SignUpScreen: React.FC = () => {
           <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
             <FontAwesome name="facebook-f" size={28} color="#7A3B3B" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={styles.socialIcon}
+            activeOpacity={0.7}
+            onPress={handleGoogle} // ✅ Wrapped handler
+          >
             <FontAwesome name="google" size={28} color="#7A3B3B" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
@@ -176,7 +182,7 @@ const SignUpScreen: React.FC = () => {
 
 export default SignUpScreen;
 
-// same styles you already have ↓
+// ✅ Styles remain unchanged
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#EDE1CB" },
   header: {

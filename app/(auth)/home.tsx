@@ -19,19 +19,18 @@ import { useTranslation } from "react-i18next";
 const { width } = Dimensions.get("window");
 
 const popularSites = [
-  { id: 1, name: "Ellora Caves", image: "https://picsum.photos/id/1018/100/100" },
-  { id: 2, name: "Taj Mahal", image: "https://picsum.photos/id/1025/100/100" },
-  { id: 3, name: "Lotus Temple", image: "https://picsum.photos/id/1011/100/100" },
-  { id: 4, name: "Hawa Mahal", image: "https://picsum.photos/id/1015/100/100" },
+  { id: 1, name: "Ellora Caves", image: require("../../assets/images/Elora.jpeg") },
+  { id: 2, name: "Taj Mahal", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { id: 3, name: "Lotus Temple", image: require("../../assets/images/Lotus-Temple.jpeg") },
+  { id: 4, name: "Hawa Mahal", image: require("../../assets/images/Hawa-Mahal.jpeg") },
 ];
 
 const recommendedSites = [
-  { id: 1, name: "Ellora Caves", location: "Maharashtra", image: "https://picsum.photos/id/1018/400/400" },
-  { id: 2, name: "Taj Mahal", location: "Agra", image: "https://picsum.photos/id/1025/400/400" },
-  { id: 3, name: "Hawa Mahal", location: "Jaipur", image: "https://picsum.photos/id/1015/400/400" },
-  { id: 4, name: "Qutub Minar", location: "Delhi", image: "https://picsum.photos/id/1019/400/400" },
-  { id: 5, name: "CharMinar", location: "Hyderabad", image: "https://picsum.photos/id/1020/400/400" },
-  { id: 6, name: "Jantar Mantar", location: "Jaipur", image: "https://picsum.photos/id/1021/400/400" },
+  { id: 1, name: "", location: "", image: require("../../assets/images/Ellora-Cave.jpeg") },
+  { id: 2, name: "", location: "", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { id: 3, name: "", location: "", image: require("../../assets/images/HawaMahal.jpeg") },
+  { id: 4, name: "", location: "", image: require("../../assets/images/QutubMinar.jpeg") },
+  { id: 5, name: "", location: "", image: require("../../assets/images/CharMinar.jpeg") },
 ];
 
 export default function HomeScreen() {
@@ -39,44 +38,50 @@ export default function HomeScreen() {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const renderRecommended = ({ item, index }) => {
-    const inputRange = [
-      (index - 1) * (width * 0.75),
-      index * (width * 0.75),
-      (index + 1) * (width * 0.75),
-    ];
+  const inputRange = [
+    (index - 1) * (width * 0.75),
+    index * (width * 0.75),
+    (index + 1) * (width * 0.75),
+  ];
 
-    const scale = scrollX.interpolate({
-      inputRange,
-      outputRange: [0.9, 1, 0.9],
-      extrapolate: "clamp",
-    });
+  const scaleAnim = scrollX.interpolate({
+    inputRange,
+    outputRange: [0.9, 1, 0.9],
+    extrapolate: "clamp",
+  });
 
-    const opacity = scrollX.interpolate({
-      inputRange,
-      outputRange: [0.6, 1, 0.6],
-      extrapolate: "clamp",
-    });
+  const opacityAnim = scrollX.interpolate({
+    inputRange,
+    outputRange: [0.6, 1, 0.6],
+    extrapolate: "clamp",
+  });
 
-    return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => item.name === "Ellora Caves" && router.push("/Ellora")}
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        // Navigate to Ellora screen if the image matches
+        if (item.image === require("../../assets/images/Ellora-Cave.jpeg")) {
+          router.push("/Ellora");
+        }
+        // Add other navigations if needed
+      }}
+    >
+      <Animated.View
+        style={[
+          styles.recommendedCard,
+          { transform: [{ scale: scaleAnim }], opacity: opacityAnim },
+        ]}
       >
-        <Animated.View
-          style={[
-            styles.recommendedCard,
-            { transform: [{ scale }], opacity },
-          ]}
-        >
-          <Image source={{ uri: item.image }} style={styles.recommendedImage} />
-          <View style={styles.recommendedTextContainer}>
-            <Text style={styles.recommendedName}>{item.name}</Text>
-            <Text style={styles.recommendedLocation}>{item.location}</Text>
-          </View>
-        </Animated.View>
-      </TouchableOpacity>
-    );
-  };
+        <Image source={item.image} style={styles.recommendedImage} />
+        <View style={styles.recommendedTextContainer}>
+          <Text style={styles.recommendedName}>{item.name}</Text>
+          <Text style={styles.recommendedLocation}>{item.location}</Text>
+        </View>
+      </Animated.View>
+    </TouchableOpacity>
+  );
+};
 
   return (
     <View style={styles.container}>
@@ -128,7 +133,7 @@ export default function HomeScreen() {
               onPress={() => site.name === "Ellora Caves" && router.push("/Ellora")}
               activeOpacity={0.7}
             >
-              <Image source={{ uri: site.image }} style={styles.popularSiteImage} />
+              <Image source={site.image} style={styles.popularSiteImage} />
               <Text style={styles.popularSiteName}>{site.name}</Text>
             </TouchableOpacity>
           ))}
@@ -171,8 +176,8 @@ export default function HomeScreen() {
           <Text style={styles.navLabel}>{t("bottom_explore")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} activeOpacity={0.7}>
-          <FontAwesome name="map" size={24} color="#D3B9B9" />
-          <Text style={styles.navLabel}>{t("bottom_travel")}</Text>
+          <FontAwesome name="shopping-bag" size={24} color="#D3B9B9" />
+          <Text style={styles.navLabel}>{t("Bazaar")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.navItem}
@@ -299,7 +304,7 @@ const styles = StyleSheet.create({
     width: width * 0.75,
     height: width * 0.85,
     borderRadius: 30,
-    marginHorizontal: -3,
+    marginHorizontal: -5,
     overflow: "hidden",
     backgroundColor: "#eee",
     shadowColor: "#000",

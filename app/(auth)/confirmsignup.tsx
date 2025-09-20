@@ -1,41 +1,42 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { confirmSignUp, resendSignUpCode } from "aws-amplify/auth";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+// ✅ 1. Import the new Supabase functions
+import { handleResendCode, handleVerifyOtp } from "../../app-example/app/lib/auth"; // Make sure path is correct
 
 const ConfirmSignUpScreen: React.FC = () => {
   const router = useRouter();
   const { email } = useLocalSearchParams<{ email: string }>(); // get email from SignUp
   const [code, setCode] = useState("");
 
+  // ✅ 2. This function now calls the Supabase verification logic
   const handleConfirm = async () => {
-    try {
-      await confirmSignUp({ username: email, confirmationCode: code });
-      Alert.alert("✅ Success", "Your account is confirmed. Please log in.");
-      router.push("/home"); // Redirect to login or home after confirmation
-    } catch (error: any) {
-      console.log("❌ Error confirming sign up:", error);
-      Alert.alert("Error", error.message || "Something went wrong");
+    if (!email || !code) {
+      Alert.alert("Error", "Email and code are required.");
+      return;
+    }
+    const success = await handleVerifyOtp(email, code);
+    if (success) {
+      router.push("/login"); // Redirect to login after confirmation
     }
   };
 
+  // ✅ 3. This function calls the Supabase resend logic
   const handleResend = async () => {
-    try {
-      await resendSignUpCode({ username: email });
-      Alert.alert("📩 Code Resent", "A new confirmation code has been sent.");
-    } catch (error: any) {
-      console.log("❌ Error resending code:", error);
-      Alert.alert("Error", error.message || "Failed to resend code");
+    if (!email) {
+      Alert.alert("Error", "Email is missing.");
+      return;
     }
+    await handleResendCode(email);
   };
 
   return (
@@ -54,7 +55,7 @@ const ConfirmSignUpScreen: React.FC = () => {
       {/* Logo */}
       <View style={styles.logoContainer}>
         <Image
-          source={require("../../assets/images/logo.png")}
+          source={require("../../assets/images/Logo.png")} // Make sure path is correct
           style={styles.logo}
           resizeMode="contain"
         />
@@ -76,6 +77,7 @@ const ConfirmSignUpScreen: React.FC = () => {
           onChangeText={setCode}
           keyboardType="number-pad"
           returnKeyType="done"
+          maxLength={6} // OTPs are usually 6 digits
         />
 
         <TouchableOpacity
@@ -100,6 +102,7 @@ const ConfirmSignUpScreen: React.FC = () => {
 
 export default ConfirmSignUpScreen;
 
+// ✅ Your existing styles are included below
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#EDE1CB" },
   header: {
@@ -163,6 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#F9F0E6",
     marginBottom: 20,
+    textAlign: 'center', // Center the OTP code
   },
   loginButton: {
     backgroundColor: "#F9F0E6",

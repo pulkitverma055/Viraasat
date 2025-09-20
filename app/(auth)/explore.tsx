@@ -14,22 +14,22 @@ import {
 import { useTranslation } from "react-i18next"; // ✅ import translation hook
 
 const monuments = [
-  { nameKey: "taj_mahal", uri: "https://picsum.photos/id/1011/100/100" },
-  { nameKey: "ellora_caves", uri: "https://picsum.photos/id/1018/100/100" },
-  { nameKey: "hawa_mahal", uri: "https://picsum.photos/id/1025/100/100" },
-  { nameKey: "gadisar_lake", uri: "https://picsum.photos/id/1035/100/100" },
-  { nameKey: "hampi_temple", uri: "https://picsum.photos/id/1043/100/100" },
-  { nameKey: "charminar", uri: "https://picsum.photos/id/1050/100/100" },
-  { nameKey: "jantar_mantar", uri: "https://picsum.photos/id/1062/100/100" },
-  { nameKey: "elephanta_caves", uri: "https://picsum.photos/id/1070/100/100" },
-  { nameKey: "qutub_minar", uri: "https://picsum.photos/id/1084/100/100" },
-  { nameKey: "sun_temple", uri: "https://picsum.photos/id/1080/100/100" },
-  { nameKey: "buland_darwaza", uri: "https://picsum.photos/id/109/100/100" },
-  { nameKey: "pavagadh", uri: "https://picsum.photos/id/110/100/100" },
-  { nameKey: "khajuraho_temple", uri: "https://picsum.photos/id/111/100/100" },
-  { nameKey: "humayuns_tomb", uri: "https://picsum.photos/id/112/100/100" },
-  { nameKey: "rani_ki_vav", uri: "https://picsum.photos/id/113/100/100" },
-  { nameKey: "amber_fort", uri: "https://picsum.photos/id/114/100/100" }
+  { nameKey: "taj_mahal", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { nameKey: "ellora_caves", image: require("../../assets/images/Elora.jpeg") },
+  { nameKey: "hawa_mahal", image: require("../../assets/images/Hawa-Mahal.jpeg") },
+  { nameKey: "gadisar_lake", image: require("../../assets/images/Gadisar-Lake.jpeg") },
+  { nameKey: "hampi_temple", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { nameKey: "charminar", image: require("../../assets/images/CharMinar.jpeg") },
+  { nameKey: "jantar_mantar",image: require("../../assets/images/Jantar-Mantar.jpeg") },
+  { nameKey: "elephanta_caves", image: require("../../assets/images/Elephanta-Caves.jpeg") },
+  { nameKey: "qutub_minar", image: require("../../assets/images/Qutub-Minar.jpeg") },
+  { nameKey: "sun_temple", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { nameKey: "buland_darwaza", image: require("../../assets/images/Taj-Mahal.jpeg")},
+  { nameKey: "pavagadh", image: require("../../assets/images/Taj-Mahal.jpeg")},
+  { nameKey: "khajuraho_temple", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { nameKey: "humayuns_tomb",image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { nameKey: "rani_ki_vav", image: require("../../assets/images/Taj-Mahal.jpeg") },
+  { nameKey: "amber_fort", image: require("../../assets/images/Taj-Mahal.jpeg") }
 ];
 
 const bottomTabs = [
@@ -95,7 +95,7 @@ const App = () => {
               }}
             >
               <Image
-                source={{ uri: monument.uri }}
+                source={monument.image}
                 style={styles.monumentImage}
                 accessibilityLabel={`${t(monument.nameKey)} image`}
               />
