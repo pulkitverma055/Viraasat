@@ -25,11 +25,11 @@ const monuments = [
   { nameKey: "qutub_minar", image: require("../../assets/images/Qutub-Minar.jpeg") },
   { nameKey: "sun_temple", image: require("../../assets/images/Taj-Mahal.jpeg") },
   { nameKey: "buland_darwaza", image: require("../../assets/images/Taj-Mahal.jpeg")},
-  { nameKey: "pavagadh", image: require("../../assets/images/Taj-Mahal.jpeg")},
+  { nameKey: "pavagadh", image: require("../../assets/images/Pavagadh.jpeg")},
   { nameKey: "khajuraho_temple", image: require("../../assets/images/Taj-Mahal.jpeg") },
   { nameKey: "humayuns_tomb",image: require("../../assets/images/Taj-Mahal.jpeg") },
   { nameKey: "rani_ki_vav", image: require("../../assets/images/Taj-Mahal.jpeg") },
-  { nameKey: "amber_fort", image: require("../../assets/images/Taj-Mahal.jpeg") }
+  { nameKey: "amber_fort", image: require("../../assets/images/Amber-Fort.jpeg") }
 ];
 
 const bottomTabs = [

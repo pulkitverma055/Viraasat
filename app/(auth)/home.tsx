@@ -27,9 +27,9 @@ const popularSites = [
 
 const recommendedSites = [
   { id: 1, name: "", location: "", image: require("../../assets/images/Ellora-Cave.jpeg") },
-  { id: 2, name: "", location: "", image: require("../../assets/images/Taj-Mahal.jpeg") },
-  { id: 3, name: "", location: "", image: require("../../assets/images/HawaMahal.jpeg") },
-  { id: 4, name: "", location: "", image: require("../../assets/images/QutubMinar.jpeg") },
+  { id: 2, name: "", location: "", image: require("../../assets/images/TajMahal.jpeg") },
+  { id: 3, name: "", location: "", image: require("../../assets/images/Hawa_Mahal.jpeg") },
+  { id: 4, name: "", location: "", image: require("../../assets/images/Qutub-Minar.jpeg") },
   { id: 5, name: "", location: "", image: require("../../assets/images/CharMinar.jpeg") },
 ];
 
@@ -175,7 +175,8 @@ export default function HomeScreen() {
           <FontAwesome name="compass" size={24} color="#D3B9B9" />
           <Text style={styles.navLabel}>{t("bottom_explore")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.navItem} activeOpacity={0.7}
+          onPress={() => router.push("/Bazaar")}>
           <FontAwesome name="shopping-bag" size={24} color="#D3B9B9" />
           <Text style={styles.navLabel}>{t("Bazaar")}</Text>
         </TouchableOpacity>

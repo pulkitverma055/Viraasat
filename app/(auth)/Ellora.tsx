@@ -6,7 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   StatusBar,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -14,7 +14,7 @@ import {
   useFonts,
   LexendExa_400Regular,
   LexendExa_600SemiBold,
-  LexendExa_700Bold
+  LexendExa_700Bold,
 } from "@expo-google-fonts/lexend-exa";
 
 // Get device width and height
@@ -23,7 +23,8 @@ const { width, height } = Dimensions.get("window");
 // Dynamic scaling functions
 const scale = (size) => (width / 390) * size; // base width 390px
 const verticalScale = (size) => (height / 844) * size; // base height 844px
-const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
+const moderateScale = (size, factor = 0.5) =>
+  size + (scale(size) - size) * factor;
 
 // 👇 Dynamic data object
 const monument = {
@@ -38,9 +39,9 @@ const monument = {
     { label: "UNESCO Status", value: "World Heritage Site" },
     {
       label: "Famous For",
-      value: "Kailasa Temple (largest monolithic rock-cut temple)"
-    }
-  ]
+      value: "Kailasa Temple (largest monolithic rock-cut temple)",
+    },
+  ],
 };
 
 const ElloraCavesScreen = () => {
@@ -49,20 +50,25 @@ const ElloraCavesScreen = () => {
   const [fontsLoaded] = useFonts({
     LexendExa_400Regular,
     LexendExa_600SemiBold,
-    LexendExa_700Bold
+    LexendExa_700Bold,
   });
 
   if (!fontsLoaded) return null;
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+      <StatusBar
+        barStyle="dark-content"
+        translucent
+        backgroundColor="transparent"
+      />
       <ImageBackground
         source={monument.image}
         style={styles.imageBackground}
         imageStyle={styles.imageStyle}
         accessibilityLabel={`Aerial view of ${monument.title}`}
       >
+        {/* Back Button */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.push("/explore")}
@@ -71,16 +77,19 @@ const ElloraCavesScreen = () => {
           <FontAwesome name="arrow-left" size={scale(24)} color="#9c706eff" />
         </TouchableOpacity>
 
+        {/* Title */}
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{monument.title}</Text>
           <Text style={styles.subtitle}>{monument.subtitle}</Text>
         </View>
 
+        {/* Favorite Button */}
         <TouchableOpacity style={styles.favoriteButton} activeOpacity={0.7}>
           <FontAwesome name="heart" size={scale(24)} color="#5B1A18" />
         </TouchableOpacity>
       </ImageBackground>
 
+      {/* Content */}
       <View style={styles.contentContainer}>
         <Text style={styles.description}>{monument.description}</Text>
         <Text style={styles.infoTitle}>Information</Text>
@@ -92,11 +101,18 @@ const ElloraCavesScreen = () => {
           </Text>
         ))}
 
+        {/* Buttons Row */}
         <View style={styles.buttonsRow}>
           <TouchableOpacity style={styles.button} activeOpacity={0.7}>
             <Text style={styles.buttonText}>View in AR</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+
+          {/* ✅ AI Chatbot Button */}
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.7}
+            onPress={() => router.push("/ChatBot")} // Navigates to ChatBot screen
+          >
             <Text style={styles.buttonText}>AI Chatbot</Text>
           </TouchableOpacity>
         </View>
@@ -118,7 +134,7 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(50),
   },
   imageStyle: {
-    resizeMode: "cover"
+    resizeMode: "cover",
   },
   backButton: {
     backgroundColor: "#FFF3DD",
@@ -128,13 +144,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: verticalScale(20),
-    marginLeft: scale(20)
+    marginLeft: scale(20),
   },
   titleContainer: {
     flex: 1,
     justifyContent: "flex-end",
     paddingBottom: verticalScale(20),
-    marginLeft: scale(-40)
+    marginLeft: scale(-40),
   },
   title: {
     color: "#FFFFFF",
@@ -143,7 +159,7 @@ const styles = StyleSheet.create({
     fontFamily: "SF Pro",
     textShadowColor: "rgba(0,0,0,0.7)",
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4
+    textShadowRadius: 4,
   },
   subtitle: {
     color: "#FFFFFF",
@@ -153,7 +169,7 @@ const styles = StyleSheet.create({
     fontFamily: "LexendExa_600SemiBold",
     textShadowColor: "rgba(0,0,0,0.7)",
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4
+    textShadowRadius: 4,
   },
   favoriteButton: {
     backgroundColor: "#FFF3DD",
@@ -164,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "flex-end",
     marginBottom: verticalScale(20),
-    marginRight: scale(20)
+    marginRight: scale(20),
   },
   contentContainer: {
     flex: 1,
@@ -176,30 +192,30 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     fontWeight: "500",
     fontFamily: "LexendExa_400Regular",
-    marginBottom: verticalScale(15)
+    marginBottom: verticalScale(15),
   },
   infoTitle: {
     color: "#5B1A18",
     fontSize: moderateScale(22),
     fontWeight: "bold",
     fontFamily: "SF Pro",
-    marginBottom: verticalScale(5)
+    marginBottom: verticalScale(5),
   },
   infoText: {
     color: "#5B1A18",
     fontSize: moderateScale(14),
     marginBottom: verticalScale(6),
     lineHeight: verticalScale(22),
-    fontFamily: "LexendExa_400Regular"
+    fontFamily: "LexendExa_400Regular",
   },
   infoLabel: {
     fontWeight: "bold",
-    fontFamily: "LexendExa_600SemiBold"
+    fontFamily: "LexendExa_600SemiBold",
   },
   buttonsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: verticalScale(16)
+    marginTop: verticalScale(16),
   },
   button: {
     backgroundColor: "#5B1A18",
@@ -207,15 +223,15 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(14),
     paddingHorizontal: scale(18),
     minWidth: scale(140),
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonText: {
     color: "#FFF8F0",
     fontSize: moderateScale(18),
     fontWeight: "600",
     fontFamily: "LexendExa_600SemiBold",
-    letterSpacing: 1.2
-  }
+    letterSpacing: 1.2,
+  },
 });
 
 export default ElloraCavesScreen;
